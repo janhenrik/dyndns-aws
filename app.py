@@ -1,5 +1,4 @@
 from aws_cdk import (
-    aws_s3 as s3,
     aws_iam as iam,
     core,
     aws_apigateway as apigateway,
@@ -9,9 +8,6 @@ import os
 class DynDnsLambdaTemplate(core.Stack):
     def __init__(self, app: core.App, id: str, **kwargs) -> None:
         super().__init__(app, id)
-        #create an S3 bucket
-        bucket = s3.Bucket(self, "DynDnsStore")
-
         api = apigateway.RestApi(self, "dyndns-api",
                   rest_api_name="DynDns Service",
                   description="This service adjusts domain pointers in route53.")
@@ -45,14 +41,10 @@ class DynDnsLambdaTemplate(core.Stack):
                     handler="dyndns.handler",
                     role=lambda_role,
                     environment=dict(
-                        BUCKET=bucket.bucket_name,
                         ROUTE_53_ZONE_ID=os.environ["ROUTE_53_ZONE_ID"],
                         SET_HOSTNAME=os.environ["SET_HOSTNAME"],
                         SHARED_SECRET=os.environ["SHARED_SECRET"]
                     ))
-        bucket.grant_read_write(handler)
-
-
 
         get_dyndns_integration = apigateway.LambdaIntegration(handler,
                 request_templates={"application/json": '{ "statusCode": "200" }'})

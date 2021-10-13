@@ -1,16 +1,14 @@
 #force function to run by changing this: 0
 # Dynamic DNS via AWS API Gateway, Lambda & Route 53
 # Script variables use lower_case_
-from __future__ import print_function
 import json
 import re
 import hashlib
-import boto3
 import traceback
-import datetime
 import os
 import logging
 import sys
+import boto3
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
