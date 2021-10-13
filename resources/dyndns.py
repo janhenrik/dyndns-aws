@@ -15,12 +15,6 @@ import sys
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Import Lambda environment variables
-route_53_zone_id = "Z02438639VH134V380MR"
-aws_region = os.environ['AWS_REGION']
-set_hostname = "litago.test.gundelsby.com."
-
-
 def json_msg (code, msg, descr) :
     return {
         "statusCode": code,
@@ -33,9 +27,35 @@ def json_msg (code, msg, descr) :
 
 def handler (event, context):
     try:
-        # Set event data from the API Gateway to variables.
+        # Import Lambda environment variables
+        route_53_zone_id = os.environ.get('ROUTE_53_ZONE_ID')
+        set_hostname = os.environ.get('SET_HOSTNAME')
+        shared_secret = os.environ.get('SHARED_SECRET')
+        
+        logger.info(json.dumps(event))
         source_ip = event['requestContext']['identity']['sourceIp']
         logger.info('Source IP set to ' + source_ip)
+
+        validation_hash = event['queryStringParameters']['hash']
+        # Validate that the client passed a sha256 hash
+        # regex checks for a 64 character hex string.
+        logger.info('Input hash: ' + validation_hash)
+        if not re.match(r'[0-9a-fA-F]{64}', validation_hash):
+            return_status = 'fail'
+            return_message = 'You must pass a valid sha256 hash in the '\
+                'hash= argument.'
+            return json_msg(500, return_status, return_message)
+
+        # Calculate the validation hash.
+        hash_string = source_ip + set_hostname + shared_secret
+        calculated_hash = hashlib.sha256(hash_string.encode('utf-8')).hexdigest()
+        # Compare the validation_hash from the client to the
+        # calculated_hash.
+        # If they don't match, error out.
+        if not calculated_hash == validation_hash:
+            return_status = 'fail'
+            return_message = 'Validation hashes do not match.'
+            return json_msg(500,return_status, return_message)
 
         client = boto3.client("route53")
 

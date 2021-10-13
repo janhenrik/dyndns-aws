@@ -5,6 +5,7 @@ from aws_cdk import (
     aws_apigateway as apigateway,
     aws_lambda as lambda_
 )
+import os
 class DynDnsLambdaTemplate(core.Stack):
     def __init__(self, app: core.App, id: str, **kwargs) -> None:
         super().__init__(app, id)
@@ -43,8 +44,11 @@ class DynDnsLambdaTemplate(core.Stack):
                     handler="dyndns.handler",
                     role=lambda_role,
                     environment=dict(
-                    BUCKET=bucket.bucket_name)
-                    )
+                        BUCKET=bucket.bucket_name,
+                        ROUTE_53_ZONE_ID=os.environ["ROUTE_53_ZONE_ID"],
+                        SET_HOSTNAME=os.environ["SET_HOSTNAME"],
+                        SHARED_SECRET=os.environ["SHARED_SECRET"]
+                    ))
         bucket.grant_read_write(handler)
 
 
