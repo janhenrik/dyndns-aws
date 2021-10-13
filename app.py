@@ -16,6 +16,7 @@ class DynDnsLambdaTemplate(core.Stack):
                   rest_api_name="DynDns Service",
                   description="This service adjusts domain pointers in route53.")
 
+        zoneArn = 'arn:aws:route53:::hostedzone/' + os.environ["ROUTE_53_ZONE_ID"]
         lambda_policy = iam.ManagedPolicy(scope=self, id='dyndns-managed-policy',
                         statements=[
                             iam.PolicyStatement(
@@ -24,7 +25,7 @@ class DynDnsLambdaTemplate(core.Stack):
                                     "route53:ChangeResourceRecordSets" 
                                ],
                                 resources=[
-                                    'arn:aws:route53:::hostedzone/Z02438639VH134V380MR'
+                                    zoneArn
                                 ], effect=iam.Effect.ALLOW
                             )
                         ])
