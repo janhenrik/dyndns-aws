@@ -56,7 +56,7 @@ class DynDnsLambdaTemplate(core.Stack):
         api.root.add_method("GET", get_dyndns_integration,
                             api_key_required=True)
         plan = api.add_usage_plan('dyndns-usage-plan',
-                                  throttle=apigateway.ThrottleSettings(burst_limit=2, rate_limit=10))
+                                  throttle=apigateway.ThrottleSettings(burst_limit=2, rate_limit=1))
         key = api.add_api_key(id='dyndns-api-key')
         plan.add_api_stage(stage=api.deployment_stage)
         plan.add_api_key(key)
