@@ -1,7 +1,11 @@
 
 # Welcome to your CDK Python project!
 
-Simple AWS serverless code and infrastructure-code to update route53 from a HTTPS-call via API gateway. The API-gateway and lambda is secured with several lasyers of security: SSL, shared secret, api-key and a two-factor validation of ip-adress from the client (resource header and included in hash).
+Simple AWS serverless code and infrastructure-code to update route53 from a HTTPS-call via API gateway. The API-gateway and lambda is secured with several layers of security: SSL, shared secret, api-key and a two-factor validation of ip adress from the client (resource header and included in hash).
+
+* [Example client code (bash/curl)](dyndns.sh)
+* [CDK code for infrastructure](app.py)
+* [Python lambda](resources/dyndns.py)
 
 This project is inspired by https://github.com/awslabs/route53-dynamic-dns-with-lambda
 
