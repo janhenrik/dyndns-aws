@@ -1,5 +1,5 @@
 
-# Welcome to your CDK Python project!
+# Dynamic DNS with AWS Lambda and Route 53
 
 Simple AWS serverless code and infrastructure-code to update route53 from a HTTPS-call via API gateway. The API-gateway and lambda is secured with several layers of security: SSL, shared secret, api-key and a two-factor validation of ip adress from the client (resource header and included in hash).
 
