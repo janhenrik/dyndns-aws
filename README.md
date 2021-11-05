@@ -1,7 +1,15 @@
 
 # Welcome to your CDK Python project!
 
-This is a blank project for Python development with CDK.
+Simple AWS serverless code and infrastructure-code to update route53 from a HTTPS-call via API gateway. The API-gateway and lambda is secured with several lasyers of security: SSL, shared secret, api-key and a two-factor validation of ip-adress from the client (resource header and included in hash).
+
+This project is inspired by https://github.com/awslabs/route53-dynamic-dns-with-lambda
+
+## Achitecture
+![Architecture](resources/aws-architecture.jpg?raw=true)
+
+## Getting started
+This is Python development with CDK.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
@@ -47,7 +55,7 @@ To add additional dependencies, for example other CDK libraries, just add
 them to your `setup.py` file and rerun the `pip install -r requirements.txt`
 command.
 
-## Useful commands
+### Useful commands
 
  * `cdk ls`          list all stacks in the app
  * `cdk synth`       emits the synthesized CloudFormation template
